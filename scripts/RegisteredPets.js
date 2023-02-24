@@ -11,7 +11,7 @@ document.addEventListener("click", (clickEvent) => {
         // Use array deconstruction to assign the primary key to a variable named petPrimaryKey.
         for (const pet of pets) {
             if (pet.id === parseInt (petPrimaryKey)) {
-                window.alert(`${pet.name} barkes at you`)
+                window.alert(`${pet.name} barks at you`)
             }
         }
         
