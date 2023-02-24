@@ -1,5 +1,7 @@
-// changed getWalker imported function to getWalkers
-import { getWalkers } from "./database.js"
+// import getCites and assign it to cities
+import { getWalkers, getWalkerCities, getCities } from "./database.js"
+let cities = getCities()
+
 
 // added eventListener code
 document.addEventListener(
@@ -38,17 +40,16 @@ document.addEventListener(
                 Now that you have the primary key of a walker object,
                 find the whole object by iterating the walkers array.
             */
-            for (const walker of walkers) {
-
-                /*
-                    Compare the primary key of each walker to the one
-                    you have. As soon as you find the right one, display
-                    the window alert message.
-                */
-                if (walker.id === parseInt(walkerId)) {
-                    window.alert(`${walker.name} services ${walker.city}`)
+           // PUTTING IT ALL TOGETHER
+                for (const walker of walkers) {
+                    if (walker.id === parseInt(walkerId)) {
+                        const assignments = filterWalkerCitiesByWalker(walker) //Walkers.js module
+                        const cities = assignedCityNames(assignments) // Walker.js module
+                
+                        window.alert(`${walker.name} services ${cities}`)
+                    }
                 }
-            }
+            
         }
     }
 )
@@ -71,5 +72,43 @@ export const Walkers = () => {
 
     // returned walkerHTML
     return walkerHTML
+}
+
+/* 
+    ERD:
+    city.name -> city.id -> walkerCity.cityId -> walkerCity.walkerId -> walker.id -> walker.name
+    or
+    walker.name -> walker.id -> walkerCity.walkerId -> walkerCity.cityId -> city.id -> city.name
+*/
+
+
+const walkerCities = getWalkerCities() // database.js module
+
+
+// FINDING CITIES PER WALKER: First, define a function that will get all objects in the walkerCities array that are for the walker that was clicked on. It should return an array of all matching objects.
+const filterWalkerCitiesByWalker = (walker) => {
+    let assignments = []
+    for (const assignment of walkerCities) {
+        if (assignment.walkerId === walker.id) {
+            assignments.push(assignment)
+        }
+    }
+    return assignments
+}
+
+// BUILDING CITY NAMES STRING: Then, define a function that take in the array of matching objects, and use the cityId property on each one to find the matching city name. It should return a string containing all the city names.
+
+const assignedCityNames = (assignments) => {
+    let cityNames = ""
+    for (const assignment of assignments) {
+        for (const city of cities) {
+            if (city.id === assignment.cityId) {
+                cityNames = `${cityNames} and ${city.name}`
+            }
+        }
+        
+    }
+    return cityNames
+    
 }
 

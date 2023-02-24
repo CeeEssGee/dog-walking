@@ -1,20 +1,25 @@
 import { getWalkers } from "./database.js"
+import { getCities } from "./database.js"
+import { getWalkerCities } from "./database.js"
 
-// changed getWalker to getWalkers to match imported fx from database.js
-const walkers = getWalkers()
+// Update the CityList module to invoke getCities() now and store its return value in cities.
+const cities = getCities()
 
-
+// Update the for..of loop to iterate the array value of cities.
+// Make sure you interpolate the name property of the city between the <li> tags.
 export const CityList = () => {
-    // changed to an unordered list
     let citiesHTML = "<ul>"
 
-    for (const walker of walkers) {
-        // changed currentWalker to walker to match for..of loop
-        citiesHTML += `<li>${walker.city}</li>`
+    for (const city of cities) {
+        citiesHTML += `<li>${city.name}</li>`
     }
 
     citiesHTML += "</ul>"
 
     return citiesHTML
 }
+
+
+
+
 
